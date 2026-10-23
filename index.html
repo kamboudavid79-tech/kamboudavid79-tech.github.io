@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f9d46">
+<title>PubFaso IA – Commander une annonce</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#f6f7f4;--surface:#fff;--ink:#1d2b33;--muted:#5d6b73;--green:#1f9d46;--gold:#f2a516;--line:#dfe3dc;--on-green:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1a16;--surface:#17252d;--ink:#eef2ee;--muted:#9fb0b4;--line:#2a3b43;--green:#3cc468}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+main{max-width:560px;margin:0 auto;padding:20px 16px 40px}
+header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+header img{width:48px;height:48px;border-radius:10px}
+h1{font-size:22px;font-weight:800;margin:0;line-height:1.1}
+header p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.band{height:6px;border-radius:3px;background:linear-gradient(90deg,var(--green) 60%,var(--gold) 60%);margin-bottom:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
+.price{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.price b{font-size:18px}.price span{color:var(--muted);font-size:14px}
+label{display:block;font-weight:600;font-size:14px;margin:14px 0 6px}
+input,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 12px}
+textarea{min-height:84px;resize:vertical}
+input:focus,textarea:focus,button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:flex;gap:8px}
+.seg button{flex:1;padding:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;font:600 14px system-ui,sans-serif;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--on-green)}
+.go{width:100%;margin-top:18px;padding:14px;border:0;border-radius:12px;background:var(--gold);color:#1d2b33;font:800 16px system-ui,sans-serif;cursor:pointer}
+.order{display:block;margin-top:14px;padding:13px;border-radius:12px;background:var(--green);color:var(--on-green);text-align:center;text-decoration:none;font:800 15px system-ui,sans-serif}
+#err{color:#c0392b;font-size:14px;margin-top:10px;display:none}
+#payBox{display:none}
+h2{font-size:16px;margin:0 0 10px}
+.note{color:var(--muted);font-size:12px;text-align:center}
+.ref{font-weight:800;letter-spacing:1px}
+.mic{margin-top:6px;padding:9px 14px;border:1px solid var(--green);background:transparent;color:var(--green);border-radius:10px;font:600 14px system-ui,sans-serif;cursor:pointer}
+.mic[aria-pressed="true"]{background:var(--green);color:var(--on-green)}
+.filebtn{display:block;margin-top:6px;padding:14px;border:2px dashed var(--green);border-radius:12px;text-align:center;font-weight:700;color:var(--green);cursor:pointer}
+.sr{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+</style>
+</head>
+<body>
+<main>
+<header>
+<img src="icon-192.png" alt="Logo PubFaso IA">
+<div><h1>PubFaso IA</h1><p>Solutions d’IA pour le commerce</p></div>
+</header>
+<div class="band"></div>
+
+<section class="card">
+<div class="price"><div><b>Création d’annonce</b><br><span>Annonce professionnelle et percutante, optimisée pour WhatsApp et Facebook.</span></div><b>100 F CFA</b></div>
+</section>
+
+<section class="card">
+<label for="prod" style="margin-top:0">Votre produit</label>
+<input id="prod" placeholder="Ex. : Pagne Faso Dan Fani, sac en cuir…">
+<button type="button" class="mic" data-for="prod" aria-pressed="false">Dicter avec ma voix</button>
+<label for="desc">Détails à mettre en avant</label>
+<textarea id="desc" placeholder="Qualité, couleurs, tailles, livraison, promo…"></textarea>
+<button type="button" class="mic" data-for="desc" aria-pressed="false">Dicter avec ma voix</button>
+<p class="note" style="text-align:left;margin:6px 0 0">Vous pouvez aussi toucher le micro de votre clavier pour parler au lieu d’écrire.</p>
+<div class="row">
+<div><label for="price">Prix (F CFA)</label><input id="price" inputmode="numeric" placeholder="5 000"></div>
+<div><label for="city">Ville</label><input id="city" placeholder="Ouagadougou"></div>
+</div>
+<label for="contact">Votre contact WhatsApp</label>
+<input id="contact" inputmode="tel" placeholder="+226 70 00 00 00">
+<label>Canal</label>
+<div class="seg" id="chan">
+<button type="button" aria-pressed="true" data-v="WhatsApp">WhatsApp</button>
+<button type="button" aria-pressed="false" data-v="Facebook">Facebook</button>
+</div>
+<button class="go" id="pay" type="button">Commander – 100 F CFA</button>
+<div id="err" role="alert"></div>
+</section>
+
+<section class="card" id="payBox" aria-live="polite">
+<h2>Paiement</h2>
+<p style="margin:0 0 10px">Envoyez <b>100 F CFA</b> par <b>Orange Money</b> au <b>+226 54 15 04 20</b>.</p>
+<p style="margin:0 0 10px">Votre référence : <span class="ref" id="ref"></span></p>
+<label for="payer">Numéro Orange Money qui a payé</label>
+<input id="payer" inputmode="tel" placeholder="70 00 00 00">
+<label for="proof" style="margin-bottom:0">Capture d’écran du SMS de confirmation</label>
+<label for="proof" class="filebtn" id="pbtn">Choisir la capture dans la galerie</label>
+<input id="proof" class="sr" type="file" accept="image/*">
+<img id="pprev" alt="Aperçu de la capture du SMS" style="display:none;max-width:100%;max-height:220px;margin-top:8px;border-radius:10px;border:1px solid var(--line)">
+<p style="margin:14px 0 0">Ensuite, envoyez la capture de votre paiement et la photo de votre produit sur WhatsApp. Vous pouvez aussi y envoyer un message vocal. Votre annonce vous est livrée dès que le paiement est confirmé.</p>
+<a class="order" id="order" target="_blank" rel="noopener">Envoyer ma preuve de paiement sur WhatsApp</a>
+<p class="note" style="margin:8px 0 0">Si votre téléphone affiche une liste d’applications, choisissez WhatsApp, puis le contact PubFaso IA. Sinon, joignez la capture dans la conversation WhatsApp.</p>
+</section>
+<p class="note">Rédaction d’annonce professionnelle et percutante, optimisée pour WhatsApp et Facebook.</p>
+</main>
+
+<script>
+(function(){
+var NUM="22660019096",ref="",chan="WhatsApp",lastMsg="";
+var $=function(id){return document.getElementById(id)};
+document.querySelectorAll("#chan button").forEach(function(b){
+b.addEventListener("click",function(){
+chan=b.dataset.v;
+document.querySelectorAll("#chan button").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});
+update();
+});
+});
+function newRef(){var c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",s="";for(var i=0;i<6;i++)s+=c[Math.floor(Math.random()*c.length)];return s}
+function update(){
+var v=function(id){return $(id).value.trim()};
+var m="Bonjour PubFaso IA, je souhaite commander : Génération d’Annonce IA (100 F CFA).\n\nProduit : "+(v("prod")||"à préciser")
++(v("desc")?"\nDétails : "+v("desc"):"")+(v("price")?"\nPrix : "+v("price")+" F CFA":"")+(v("city")?"\nVille : "+v("city"):"")
++(v("contact")?"\nMon contact : "+v("contact"):"")+"\nCanal : "+chan
++"\n\nRéférence : "+ref+"\nNuméro qui a payé : "+v("payer")+"\nCapture du SMS de confirmation : "+($("proof").files[0]?"jointe":"à joindre")
++"\nJ’ai payé par Orange Money. Je joins la capture du paiement et la photo du produit.";
+lastMsg=m;
+$("order").href="https://wa.me/"+NUM+"?text="+encodeURIComponent(m);
+}
+["prod","desc","price","city","contact","payer"].forEach(function(id){$(id).addEventListener("input",update)});
+function micHelp(){var er=$("err");er.textContent="Le micro est bloqué. Touchez l’icône à gauche de l’adresse en haut, puis Autorisations, puis Micro, et choisissez Autoriser. Rechargez ensuite la page. Si rien ne change, utilisez le micro de votre clavier.";er.style.display="block"}
+var SR=window.SpeechRecognition||window.webkitSpeechRecognition,rec=null,active=null;
+document.querySelectorAll(".mic").forEach(function(b){
+if(!SR){b.style.display="none";return}
+b.addEventListener("click",function(){
+if(rec&&active===b){rec.stop();return}
+if(rec){try{rec.stop()}catch(e){}}
+var target=$(b.dataset.for),base=target.value.trim();
+var r=new SR();rec=r;r.lang="fr-FR";r.interimResults=true;r.continuous=true;active=b;
+b.textContent="Arrêter";b.setAttribute("aria-pressed","true");
+r.onresult=function(e){var t="";for(var i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;target.value=(base?base+" ":"")+t;target.dispatchEvent(new Event("input"))};
+r.onerror=function(ev){if(ev.error==="not-allowed"||ev.error==="service-not-allowed")micHelp();else{var er=$("err");er.textContent="La dictée ne marche pas ici : utilisez le micro de votre clavier.";er.style.display="block"}};
+r.onend=function(){b.textContent="Dicter avec ma voix";b.setAttribute("aria-pressed","false");if(active===b){active=null;rec=null}};
+var go=function(){try{r.start()}catch(e){}};
+if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
+navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){s.getTracks().forEach(function(t){t.stop()});go()}).catch(function(){micHelp();b.textContent="Dicter avec ma voix";b.setAttribute("aria-pressed","false");active=null;rec=null});
+}else go();
+});
+});
+$("proof").addEventListener("change",function(){
+var f=this.files&&this.files[0],im=$("pprev");
+if(f){im.src=URL.createObjectURL(f);im.style.display="block"}else{im.style.display="none"}
+$("pbtn").textContent=f?"Capture choisie. Toucher pour changer":"Choisir la capture dans la galerie";
+update();
+});
+$("order").addEventListener("click",function(e){
+var f=$("proof").files[0];
+if(f&&navigator.canShare&&navigator.share){
+try{
+if(navigator.canShare({files:[f]})){
+e.preventDefault();
+navigator.share({files:[f],text:lastMsg,title:"Commande PubFaso IA"}).catch(function(){});
+}
+}catch(err){}
+}
+});
+$("pay").addEventListener("click",function(){
+var err=$("err");err.style.display="none";
+if(!$("prod").value.trim()){err.textContent="Indiquez le nom de votre produit pour commander.";err.style.display="block";$("prod").focus();return}
+if(!ref)ref=newRef();
+$("ref").textContent=ref;
+update();
+$("payBox").style.display="block";
+$("payBox").scrollIntoView({behavior:"smooth",block:"start"});
+});
+if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
+})();
+</script>
+</body>
+</html>

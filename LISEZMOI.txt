@@ -1,0 +1,29 @@
+PubFaso IA – application CLIENT (indépendante de Claude)
+
+Ce dossier contient la page que vos clients utilisent pour commander une annonce :
+formulaire, infos de paiement Orange Money, bouton WhatsApp. Elle n'a besoin
+d'aucun compte Claude ni d'aucune IA. L'annonce est créée ensuite par vous,
+dans votre application PubFaso IA.
+
+Fichiers : index.html (la page), manifest.webmanifest + sw.js (pour l'installer
+comme une application), icon-192.png et icon-512.png (logo).
+
+ÉTAPE 1 – Mettre le dossier en ligne (adresse en https obligatoire)
+- Avec un service d'hébergement de sites gratuit (par exemple Netlify ou
+  GitHub Pages) : on dépose le dossier et le service donne une adresse.
+- Ou demandez à un informaticien de le mettre sur un site.
+- Gardez l'adresse obtenue : c'est le lien à envoyer à vos clients.
+
+ÉTAPE 2 – Choisir comment le client l'installe
+A) SANS APK : le client ouvre le lien dans Chrome, touche ⋮ puis « Installer ».
+   C'est le plus simple et ça se met à jour tout seul.
+B) AVEC APK : sur le site pwabuilder.com, on colle l'adresse du site et on choisit
+   « Android » pour obtenir un fichier à installer. Pour mettre l'application sur
+   le Play Store, il faut un compte développeur payant. Vérifiez les conditions
+   actuelles sur place : je ne les ai pas testées.
+   Un APK envoyé par WhatsApp oblige le client à autoriser « sources inconnues »,
+   ce qui inquiète beaucoup de gens.
+
+POUR MODIFIER LES INFOS : ouvrez index.html et changez
+- le numéro WhatsApp : NUM="22660019096"
+- le numéro de paiement et le prix : cherchez « 54 15 04 20 » et « 100 F CFA »
